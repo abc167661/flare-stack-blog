@@ -90,17 +90,6 @@ export function TagSelector({
       return { previousTags, optimisticTagId: optimisticTag.id };
     },
 
-    // If mutation fails, roll back to snapshot
-    onError: (_err, _newTagName, context) => {
-      if (context?.previousTags) {
-        queryClient.setQueryData(TAGS_KEYS.adminList({}), context.previousTags);
-      }
-      // Also remove the optimistic tag from selection if it failed
-      if (context?.optimisticTagId) {
-        onChange(value.filter((id) => id !== context.optimisticTagId));
-      }
-    },
-
     // If mutation succeeds, we need to swap the optimistic ID with the real ID
     onSuccess: (newTag, _variables, context) => {
       // 1. Update the cache to replace the temp tag with the real one
@@ -122,7 +111,20 @@ export function TagSelector({
     },
 
     // Always refetch after error or success for consistency
-    onSettled: () => {
+    onSettled: (_data, settledError, _newTagName, context) => {
+      if (settledError) {
+        // If mutation fails, roll back to snapshot
+        if (context?.previousTags) {
+          queryClient.setQueryData(
+            TAGS_KEYS.adminList({}),
+            context.previousTags,
+          );
+        }
+        if (context?.optimisticTagId) {
+          onChange(value.filter((id) => id !== context.optimisticTagId));
+        }
+      }
+
       queryClient.invalidateQueries({
         queryKey: TAGS_KEYS.adminList({}),
       });

@@ -133,8 +133,8 @@ export function usePostActions({
         setProcessState("IDLE");
       }, 3000);
     },
-    onError: (error) => {
-      toast.error("发布流启动失败", { description: error.message });
+    onSettled: (_data, error) => {
+      if (!error) return;
       setProcessState("IDLE");
     },
   });
@@ -172,7 +172,8 @@ export function usePostActions({
         });
       }
     },
-    onError: (error) => {
+    onSettled: (_data, error) => {
+      if (!error) return;
       console.error("Slug生成失败:", error);
       setError("Slug生成失败");
       const fallbackSlug = slugify(post.title) || "untitled-log";
@@ -189,11 +190,6 @@ export function usePostActions({
       }),
     onSuccess: (result) => {
       setPost((prev) => ({ ...prev, summary: result.summary }));
-    },
-    onError: (error) => {
-      toast.error("摘要生成失败", {
-        description: error.message,
-      });
     },
   });
 

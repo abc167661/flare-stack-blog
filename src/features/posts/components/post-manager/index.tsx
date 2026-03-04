@@ -2,7 +2,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { ListFilter, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
 import { PostRow, PostsToolbar } from "./components";
 import { useDeletePost, usePosts } from "./hooks";
 import { PostManagerSkeleton } from "./post-manager-skeleton";
@@ -98,11 +97,6 @@ export function PostManager({
       navigate({
         to: "/admin/posts/edit/$id",
         params: { id: String(createdPost.id) },
-      });
-    },
-    onError: (e) => {
-      toast.error("新建条目失败", {
-        description: e.message,
       });
     },
   });

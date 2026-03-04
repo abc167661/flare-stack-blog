@@ -178,9 +178,6 @@ export function BackupRestoreSection() {
           }
           setExportTaskId(result.data.taskId);
         },
-        onError: (error) => {
-          toast.error("启动失败", { description: error.message });
-        },
       },
     );
   };
@@ -281,9 +278,6 @@ export function BackupRestoreSection() {
           }
         }
         setImportTaskId(result.data.taskId);
-      },
-      onError: (error) => {
-        toast.error("上传失败", { description: error.message });
       },
     });
 

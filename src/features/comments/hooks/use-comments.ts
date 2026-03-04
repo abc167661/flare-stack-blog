@@ -12,27 +12,30 @@ export function useComments(postId?: number) {
 
   const createCommentMutation = useMutation({
     mutationFn: async (input: Parameters<typeof createCommentFn>[0]) => {
-      const result = await createCommentFn(input);
+      return await createCommentFn(input);
+    },
+    onSuccess: (result) => {
       if (result.error) {
         const reason = result.error.reason;
         switch (reason) {
           case "ROOT_COMMENT_NOT_FOUND":
           case "REPLY_TO_COMMENT_NOT_FOUND":
-            throw new Error("该评论已被删除，请刷新页面");
+            toast.error("该评论已被删除，请刷新页面");
+            return;
           case "INVALID_ROOT_ID":
           case "ROOT_COMMENT_POST_MISMATCH":
           case "REPLY_TO_COMMENT_ROOT_MISMATCH":
           case "ROOT_COMMENT_CANNOT_HAVE_REPLY_TO":
-            throw new Error("评论结构异常，请刷新页面重试");
+            toast.error("评论结构异常，请刷新页面重试");
+            return;
           default: {
             reason satisfies never;
-            throw new Error("未知错误");
+            toast.error("未知错误");
+            return;
           }
         }
       }
-      return result.data;
-    },
-    onSuccess: () => {
+
       // Invalidate both root comments and all replies queries for this post
       if (postId) {
         queryClient.invalidateQueries({
@@ -55,30 +58,30 @@ export function useComments(postId?: number) {
         exact: false,
       });
     },
-    onError: (error) => {
-      toast.error(error.message);
-    },
   });
 
   const deleteCommentMutation = useMutation({
     mutationFn: async (input: Parameters<typeof deleteCommentFn>[0]) => {
-      const result = await deleteCommentFn(input);
+      return await deleteCommentFn(input);
+    },
+    onSuccess: (result) => {
       if (result.error) {
         const reason = result.error.reason;
         switch (reason) {
           case "COMMENT_NOT_FOUND":
-            throw new Error("评论不存在或已删除");
+            toast.error("删除失败: 评论不存在或已删除");
+            return;
           case "PERMISSION_DENIED":
-            throw new Error("无权限删除该评论");
+            toast.error("删除失败: 无权限删除该评论");
+            return;
           default: {
             reason satisfies never;
-            throw new Error("未知错误");
+            toast.error("删除失败: 未知错误");
+            return;
           }
         }
       }
-      return result.data;
-    },
-    onSuccess: () => {
+
       // Invalidate both root comments and all replies queries for this post
       if (postId) {
         queryClient.invalidateQueries({
@@ -102,9 +105,6 @@ export function useComments(postId?: number) {
       });
       toast.success("评论已删除");
     },
-    onError: (error) => {
-      toast.error("删除失败: " + error.message);
-    },
   });
 
   return {
@@ -120,37 +120,33 @@ export function useAdminComments() {
 
   const moderateMutation = useMutation({
     mutationFn: async (input: Parameters<typeof moderateCommentFn>[0]) => {
-      const result = await moderateCommentFn(input);
-      if (result.error) {
-        throw new Error("评论不存在");
-      }
-      return result.data;
+      return await moderateCommentFn(input);
     },
-    onSuccess: () => {
+    onSuccess: (result) => {
+      if (result.error) {
+        toast.error("操作失败: 评论不存在");
+        return;
+      }
+
       // Invalidate all comment related queries to be safe since moderation
       // affects visibility in both admin and public views
       queryClient.invalidateQueries({ queryKey: COMMENTS_KEYS.all });
       toast.success("审核操作成功");
     },
-    onError: (error) => {
-      toast.error("操作失败: " + error.message);
-    },
   });
 
   const adminDeleteMutation = useMutation({
     mutationFn: async (input: Parameters<typeof adminDeleteCommentFn>[0]) => {
-      const result = await adminDeleteCommentFn(input);
-      if (result.error) {
-        throw new Error("评论不存在");
-      }
-      return result.data;
+      return await adminDeleteCommentFn(input);
     },
-    onSuccess: () => {
+    onSuccess: (result) => {
+      if (result.error) {
+        toast.error("删除失败: 评论不存在");
+        return;
+      }
+
       queryClient.invalidateQueries({ queryKey: COMMENTS_KEYS.all });
       toast.success("评论已永久删除");
-    },
-    onError: (error) => {
-      toast.error("删除失败: " + error.message);
     },
   });
 

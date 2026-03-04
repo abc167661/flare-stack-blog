@@ -29,9 +29,6 @@ export function useNotificationToggle(userId: string | undefined) {
       });
       toast.success(enabled ? "已开启通知" : "已关闭通知");
     },
-    onError: () => {
-      toast.error("操作失败，请重试");
-    },
   });
 
   return {

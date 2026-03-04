@@ -20,8 +20,9 @@ export function SearchMaintenance() {
         { id: rebuildToastId },
       );
     },
-    onError: (error) => {
-      toast.error(error.message || "索引重建失败", { id: rebuildToastId });
+    onSettled: (_data, error) => {
+      if (!error) return;
+      toast.dismiss(rebuildToastId);
     },
   });
 
