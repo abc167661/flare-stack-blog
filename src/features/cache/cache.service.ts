@@ -4,7 +4,6 @@ import type { CacheKey, CacheNamespace } from "./types";
 import type { Duration } from "@/lib/duration";
 import { ms } from "@/lib/duration";
 import { TAGS_CACHE_KEYS } from "@/features/tags/tags.schema";
-import { ok } from "@/lib/errors";
 import { purgeSiteCDNCache } from "@/lib/invalidate";
 
 /**
@@ -201,5 +200,5 @@ export async function invalidateSiteCache(
   ];
 
   await Promise.all([purgeTask, ...kvTasks]);
-  return ok({ success: true });
+  return { success: true };
 }

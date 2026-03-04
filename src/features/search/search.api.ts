@@ -4,49 +4,21 @@ import {
   UpsertSearchDocSchema,
 } from "@/features/search/search.schema";
 import * as SearchService from "@/features/search/search.service";
-import { err } from "@/lib/errors";
-import { dbMiddleware, hasSession, sessionMiddleware } from "@/lib/middlewares";
+import { adminMiddleware, dbMiddleware } from "@/lib/middlewares";
 
 export const buildSearchIndexFn = createServerFn()
-  .middleware([sessionMiddleware])
-  .handler(({ context }) => {
-    if (!hasSession(context)) {
-      return err({ reason: "UNAUTHENTICATED" });
-    }
-    if (context.session.user.role !== "admin") {
-      return err({ reason: "PERMISSION_DENIED" });
-    }
-
-    return SearchService.rebuildIndex(context);
-  });
+  .middleware([adminMiddleware])
+  .handler(({ context }) => SearchService.rebuildIndex(context));
 
 export const upsertSearchDocFn = createServerFn({ method: "POST" })
-  .middleware([sessionMiddleware])
+  .middleware([adminMiddleware])
   .inputValidator(UpsertSearchDocSchema)
-  .handler(({ data, context }) => {
-    if (!hasSession(context)) {
-      return err({ reason: "UNAUTHENTICATED" });
-    }
-    if (context.session.user.role !== "admin") {
-      return err({ reason: "PERMISSION_DENIED" });
-    }
-
-    return SearchService.upsert(context, data);
-  });
+  .handler(({ data, context }) => SearchService.upsert(context, data));
 
 export const deleteSearchDocFn = createServerFn({ method: "POST" })
-  .middleware([sessionMiddleware])
+  .middleware([adminMiddleware])
   .inputValidator(DeleteSearchDocSchema)
-  .handler(({ data, context }) => {
-    if (!hasSession(context)) {
-      return err({ reason: "UNAUTHENTICATED" });
-    }
-    if (context.session.user.role !== "admin") {
-      return err({ reason: "PERMISSION_DENIED" });
-    }
-
-    return SearchService.deleteIndex(context, data);
-  });
+  .handler(({ data, context }) => SearchService.deleteIndex(context, data));
 
 export const getIndexVersionFn = createServerFn()
   .middleware([dbMiddleware])

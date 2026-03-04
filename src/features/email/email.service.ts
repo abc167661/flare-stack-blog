@@ -69,7 +69,7 @@ export async function getReplyNotificationStatus(
     userId,
     "reply_notification",
   );
-  return ok({ enabled: !unsubscribed });
+  return { enabled: !unsubscribed };
 }
 
 export async function toggleReplyNotification(
@@ -81,7 +81,7 @@ export async function toggleReplyNotification(
   } else {
     await EmailData.unsubscribe(context.db, data.userId, "reply_notification");
   }
-  return ok({ success: true });
+  return { success: true };
 }
 
 export async function sendEmail(

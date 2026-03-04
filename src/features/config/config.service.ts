@@ -1,7 +1,6 @@
 import type { SystemConfig } from "@/features/config/config.schema";
 import * as CacheService from "@/features/cache/cache.service";
 import * as ConfigRepo from "@/features/config/config.data";
-import { ok } from "@/lib/errors";
 import {
   CONFIG_CACHE_KEYS,
   SystemConfigSchema,
@@ -10,13 +9,11 @@ import {
 export async function getSystemConfig(
   context: DbContext & { executionCtx: ExecutionContext },
 ) {
-  return ok(
-    await CacheService.get(
-      context,
-      CONFIG_CACHE_KEYS.system,
-      SystemConfigSchema.nullable(),
-      async () => await ConfigRepo.getSystemConfig(context.db),
-    ),
+  return await CacheService.get(
+    context,
+    CONFIG_CACHE_KEYS.system,
+    SystemConfigSchema.nullable(),
+    async () => await ConfigRepo.getSystemConfig(context.db),
   );
 }
 
@@ -31,5 +28,5 @@ export async function updateSystemConfig(
     CONFIG_CACHE_KEYS.isEmailConfigured,
   );
 
-  return ok({ success: true });
+  return { success: true };
 }

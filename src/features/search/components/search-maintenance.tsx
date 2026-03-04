@@ -15,25 +15,8 @@ export function SearchMaintenance() {
       toast.loading("正在重新映射索引...", { id: rebuildToastId });
     },
     onSuccess: (result) => {
-      if (result.error) {
-        const reason = result.error.reason;
-        switch (reason) {
-          case "UNAUTHENTICATED":
-            toast.error("登录状态已失效，请重新登录", { id: rebuildToastId });
-            return;
-          case "PERMISSION_DENIED":
-            toast.error("权限不足，仅管理员可操作", { id: rebuildToastId });
-            return;
-          default: {
-            reason satisfies never;
-            toast.error("索引重建失败", { id: rebuildToastId });
-            return;
-          }
-        }
-      }
-
       toast.success(
-        `索引重建完成 (耗时 ${result.data.duration}ms, 共 ${result.data.indexed} 条数据)`,
+        `索引重建完成 (耗时 ${result.duration}ms, 共 ${result.indexed} 条数据)`,
         { id: rebuildToastId },
       );
     },

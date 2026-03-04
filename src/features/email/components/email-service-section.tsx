@@ -16,12 +16,7 @@ interface EmailSectionProps {
       senderName?: string;
     };
   }) => Promise<
-    Result<
-      { success: boolean },
-      | { reason: "SEND_FAILED"; message: string }
-      | { reason: "UNAUTHENTICATED" }
-      | { reason: "PERMISSION_DENIED" }
-    >
+    Result<{ success: boolean }, { reason: "SEND_FAILED"; message: string }>
   >;
 }
 

@@ -18,22 +18,14 @@ export function useNotificationToggle(userId: string | undefined) {
     queryFn: () => getReplyNotificationStatusFn(),
     enabled: !!userId,
   });
-  const currentEnabled =
-    !notificationStatus || notificationStatus.error
-      ? undefined
-      : notificationStatus.data.enabled;
+  const currentEnabled = notificationStatus?.enabled;
 
   const mutation = useMutation({
     mutationFn: (enabled: boolean) =>
       toggleReplyNotificationFn({ data: { enabled } }),
-    onSuccess: (result, enabled) => {
-      if (result.error) {
-        toast.error("请先登录后再操作");
-        return;
-      }
+    onSuccess: (_result, enabled) => {
       queryClient.setQueryData(EMAIL_KEYS.replyNotification(userId), {
-        data: { enabled },
-        error: null,
+        enabled,
       });
       toast.success(enabled ? "已开启通知" : "已关闭通知");
     },
@@ -53,10 +45,6 @@ export function useNotificationToggle(userId: string | undefined) {
       }
       if (queryError) {
         toast.error("获取通知状态失败，请重试");
-        return;
-      }
-      if (notificationStatus?.error) {
-        toast.error("请先登录后再操作");
         return;
       }
       if (currentEnabled === undefined) {
