@@ -7,9 +7,10 @@ import { useMemo } from "react";
 import { z } from "zod";
 import theme from "@theme";
 import { postsInfiniteQueryOptions } from "@/features/posts/queries";
+import { getSiteDomainFn } from "@/features/site/site.api";
 import { blogConfig } from "@/blog.config";
 import { tagsQueryOptions } from "@/features/tags/queries";
-import { buildCanonicalHref, canonicalLink } from "@/lib/seo";
+import { buildCanonicalUrl, canonicalLink } from "@/lib/seo";
 
 const { postsPerPage } = theme.config.posts;
 
@@ -21,7 +22,7 @@ export const Route = createFileRoute("/_public/posts")({
   pendingComponent: PostsSkeleton,
   loaderDeps: ({ search: { tagName } }) => ({ tagName }),
   loader: async ({ context, deps }) => {
-    await Promise.all([
+    const [, , domain] = await Promise.all([
       context.queryClient.prefetchInfiniteQuery(
         postsInfiniteQueryOptions({
           tagName: deps.tagName,
@@ -29,11 +30,12 @@ export const Route = createFileRoute("/_public/posts")({
         }),
       ),
       context.queryClient.prefetchQuery(tagsQueryOptions),
+      getSiteDomainFn(),
     ]);
 
     return {
       title: "全部文章",
-      canonicalHref: buildCanonicalHref("/posts", {
+      canonicalHref: buildCanonicalUrl(domain, "/posts", {
         tagName: deps.tagName,
       }),
     };
