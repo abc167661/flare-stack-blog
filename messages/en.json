@@ -1098,6 +1098,15 @@
   "settings_site_field_transition_duration": "Transition Duration ms",
   "settings_site_field_transition_duration_hint": "Only affects the default theme background layer fade, mainly for homepage background switching. It does not control router-level page transitions.",
   "settings_site_field_avatar": "Avatar",
+  "settings_site_field_primary_hue": "Primary Hue",
+  "settings_site_field_primary_hue_hint": "Controls the fuwari theme accent hue. Changing it updates links, buttons, highlights, and tinted surfaces.",
+  "settings_site_primary_preview_title": "Theme Preview",
+  "settings_site_primary_preview_desc": "Live fuwari accent preview, current hue: {hue}deg.",
+  "settings_site_primary_preview_card_label": "Tinted Card",
+  "settings_site_primary_preview_card_title": "Primary Atmosphere",
+  "settings_site_primary_preview_card_desc": "This preview uses the same hue-driven palette as fuwari buttons, highlights, and soft backgrounds.",
+  "settings_site_primary_preview_btn_primary": "Primary Button",
+  "settings_site_primary_preview_btn_tinted": "Tinted Surface",
   "settings_site_validation_too_long": [
     {
       "declarations": ["input max"],
@@ -1108,6 +1117,7 @@
   ],
   "settings_site_validation_invalid_url": "Please enter a valid URL",
   "settings_site_validation_invalid_email": "Please enter a valid email address",
+  "settings_site_validation_hue_range": "Value must be between 0 and 360",
   "settings_site_validation_invalid_asset_ref": "Please enter a root-relative site asset path",
   "settings_site_validation_invalid_asset_path": "Please enter a root-relative site asset path",
   "settings_site_validation_opacity_range": "Value must be between 0 and 0.4",

@@ -7,6 +7,8 @@ export const DEFAULT_THEME_BLUR_MIN = 0;
 export const DEFAULT_THEME_BLUR_MAX = 32;
 export const DEFAULT_THEME_TRANSITION_MIN = 0;
 export const DEFAULT_THEME_TRANSITION_MAX = 1500;
+export const FUWARI_THEME_HUE_MIN = 0;
+export const FUWARI_THEME_HUE_MAX = 360;
 
 function createSiteTextSchema(max: number) {
   return z.string().trim().max(max);
@@ -131,6 +133,22 @@ function createTransitionDurationFormSchema(messages: Messages) {
     });
 }
 
+function createHueSchema() {
+  return z
+    .number()
+    .int()
+    .min(FUWARI_THEME_HUE_MIN)
+    .max(FUWARI_THEME_HUE_MAX, {
+      message: `Value must be between ${FUWARI_THEME_HUE_MIN} and ${FUWARI_THEME_HUE_MAX}`,
+    });
+}
+
+function createHueFormSchema(messages: Messages) {
+  return z.number().int().min(FUWARI_THEME_HUE_MIN).max(FUWARI_THEME_HUE_MAX, {
+    message: messages.settings_site_validation_hue_range(),
+  });
+}
+
 function createDefaultThemeBackgroundSchema() {
   return z.object({
     homeImage: createAssetRefSchema(),
@@ -210,6 +228,7 @@ function createFuwariThemeSiteConfigSchema() {
   return z.object({
     homeBg: createAssetRefSchema(),
     avatar: createAssetRefSchema(),
+    primaryHue: createHueSchema(),
   });
 }
 
@@ -217,6 +236,7 @@ function createFuwariThemeSiteConfigInputSchema() {
   return z.object({
     homeBg: createAssetRefSchema().optional(),
     avatar: createAssetRefSchema().optional(),
+    primaryHue: createHueSchema().optional(),
   });
 }
 
@@ -224,6 +244,7 @@ function createFuwariThemeSiteConfigInputFormSchema(messages: Messages) {
   return z.object({
     homeBg: createAssetRefFormSchema(messages).optional(),
     avatar: createAssetRefFormSchema(messages).optional(),
+    primaryHue: createHueFormSchema(messages).optional(),
   });
 }
 

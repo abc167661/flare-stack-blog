@@ -1091,6 +1091,15 @@
   "settings_site_field_transition_duration": "过渡时长 ms",
   "settings_site_field_transition_duration_hint": "只影响默认主题背景层的淡入淡出速度，主要用于首页背景切换；不影响路由级页面切换动画。",
   "settings_site_field_avatar": "头像",
+  "settings_site_field_primary_hue": "主色 Hue",
+  "settings_site_field_primary_hue_hint": "控制 fuwari 主题的主强调色相。调整后会同步影响链接、按钮、高亮和带色背景。",
+  "settings_site_primary_preview_title": "主题预览",
+  "settings_site_primary_preview_desc": "fuwari 主色实时预览，当前 hue：{hue}deg。",
+  "settings_site_primary_preview_card_label": "染色卡片",
+  "settings_site_primary_preview_card_title": "主色氛围",
+  "settings_site_primary_preview_card_desc": "这个预览使用了和 fuwari 按钮、高亮、浅色背景相同的 hue 派生颜色。",
+  "settings_site_primary_preview_btn_primary": "主按钮",
+  "settings_site_primary_preview_btn_tinted": "染色背景",
   "settings_site_validation_too_long": [
     {
       "declarations": ["input max"],
@@ -1101,6 +1110,7 @@
   ],
   "settings_site_validation_invalid_url": "请输入有效的 URL",
   "settings_site_validation_invalid_email": "请输入有效的邮箱地址",
+  "settings_site_validation_hue_range": "取值范围应在 0 到 360 之间",
   "settings_site_validation_invalid_asset_ref": "请输入以 / 开头的站内资源路径",
   "settings_site_validation_invalid_asset_path": "请输入以 / 开头的站内资源路径",
   "settings_site_validation_opacity_range": "取值范围应在 0 到 0.4 之间",

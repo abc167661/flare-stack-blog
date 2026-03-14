@@ -4,8 +4,10 @@ import {
   createRootRouteWithContext,
   HeadContent,
   Scripts,
+  useRouteContext,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import theme from "@theme";
 import { ThemeProvider } from "@/components/common/theme-provider";
 import { siteConfigQuery } from "@/features/config/queries";
 import TanStackQueryDevtools from "@/integrations/tanstack-query/devtools";
@@ -111,9 +113,14 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   const locale = getLocale();
+  const { siteConfig } = useRouteContext({ from: "__root__" });
 
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html
+      lang={locale}
+      suppressHydrationWarning
+      style={theme.getDocumentStyle?.(siteConfig)}
+    >
       <head>
         <HeadContent />
       </head>

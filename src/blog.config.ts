@@ -24,6 +24,7 @@ export const blogConfig = {
     fuwari: {
       homeBg: "/images/home-bg.webp",
       avatar: "/images/avatar.png",
+      primaryHue: 250,
     },
   },
 } as const satisfies SiteConfig;
